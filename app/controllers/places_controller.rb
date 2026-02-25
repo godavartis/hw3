@@ -5,7 +5,9 @@ class PlacesController < ApplicationController
 
   def show
     @place = Place.find(params[:id])
-    @entries = Entry.where(place_id: @place.id).order(posted_on: :desc)
+
+    @entries = Entry.where(place_id: @place.id)
+    @entries = @entries.order(posted_on: :desc)
   end
 
   def new
@@ -13,12 +15,13 @@ class PlacesController < ApplicationController
   end
 
   def create
-    @place = Place.new(name: params[:name])
+    @place = Place.new
+    @place.name = params[:name]
 
     if @place.save
       redirect_to("/places")
     else
-      render(:new)
+      render("new")
     end
   end
 end
